@@ -1,0 +1,22 @@
+version: "3.9"      # docker compose syntax version
+
+services:
+  app:              # name of our service & it will run our docker file
+    build:
+      context: .    # build the docker file in current dir
+      args:         # for development (local)
+        - DEV=true
+    ports:          # port mapping between local & docker
+      - "8000:8000" # it maps port 8000 on local machine to port 8000 inside docker container
+
+    # we are doing this to update our dir 'app' from local to docker container in real time without creating build everytime. So, in other words, we are syncing the local code with docker container code
+    volumes:        # volumes are way to map to directories from local to docker container
+      - ./app:/app
+        # its a 2-way mapping, connects local dir 'app' with dir 'app' inside docker container
+        # so any change in any(local or container) will reflect in other too automatically
+
+    # its an optional command
+    # if we use any command with 'docker compose' (eg. docker compose run) in terminal then this command wont execute and if we wont add any command with 'docker compose' then below command will run by default
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
+
