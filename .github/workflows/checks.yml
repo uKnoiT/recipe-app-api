@@ -10,7 +10,7 @@ jobs:
     name: Test and Lint
       # just a name to see which job/step is currently executing when workflow is running
       # it will be shown on the github actions console
-    run-on: ubuntu-20.04
+    runs-on: ubuntu-20.04
       # its an 'ubuntu' runner on which the jobs will run
       # so ubuntu 20.04 has docker and docker compose pre installed
       # so we dont need to install it in this runner thru our workflow
