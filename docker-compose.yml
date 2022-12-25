@@ -19,4 +19,34 @@ services:
     # if we use any command with 'docker compose' (eg. docker compose run) in terminal then this command wont execute and if we wont add any command with 'docker compose' then below command will run by default
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8000"
+    environment:
+      # app service will use these db creds to connect with db service,
+      # so these values must be same as in db service env vars
+      # these are only for local development server
+      # for production, we wont be hard coding these db creds in source code
+      - DB_HOST=db    # database service name
+      - DB_NAME=devdb   # database name
+      - DB_USER=devuser   # user for that database
+      - DB_PASS=changeme  # pass for that database
+    depends_on:
+      # this tell docker compose that app service depends on db service,
+      # so when starting app service,it will wait for db service to start
+      # and if db service fails then it will also fail the app service
+      - db
 
+  db:
+    image: postgres:13-alpine   # lightweight docker image for postgres
+    volumes:
+      - dev-db-data:/var/lib/postgresql/data    # there shud not be a space after ':'
+    environment:
+      # when the db service first starts, it will create db with below configs
+      # these are only for local development server
+      # for production, we wont be hard coding db creds in source code
+      - POSTGRES_DB=devdb       # db name
+      - POSTGRES_USER=devuser   # user for that db
+      - POSTGRES_PASSWORD=changeme    # pass for that user
+
+volumes:    # for data storing
+  dev-db-data:
+    # its the name of the volume
+    # it will be empty bcz it will automatically store data at the default location in the file system
