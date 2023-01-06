@@ -16,9 +16,11 @@ services:
         # so any change in any(local or container) will reflect in other too automatically
 
     # its an optional command
-    # if we use any command with 'docker compose' (eg. docker compose run) in terminal then this command wont execute and if we wont add any command with 'docker compose' then below command will run by default
+    # if we use any command with 'docker compose' (eg. docker compose run) in terminal then this command wont execute, and if we wont add any command with 'docker compose' then below command will run by default
     command: >
-      sh -c "python manage.py runserver 0.0.0.0:8000"
+      sh -c "python manage.py wait_for_db &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
     environment:
       # app service will use these db creds to connect with db service,
       # so these values must be same as in db service env vars
@@ -30,7 +32,7 @@ services:
       - DB_PASS=changeme  # pass for that database
     depends_on:
       # this tell docker compose that app service depends on db service,
-      # so when starting app service,it will wait for db service to start
+      # so when starting app service, it will wait for db service to start,
       # and if db service fails then it will also fail the app service
       - db
 

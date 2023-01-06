@@ -29,9 +29,10 @@ jobs:
           # its a pre-made github action which can be found in github official actions repository
           # it is use to make the code available and accessible for the workflow to perform later steps on the code
       - name: Test
-        run: docker-compose run --rm app sh -c "python manage.py test"
-          # this is use to test the whole code (all python files only)
-          # above command will run on the code and perform unit testing
+        run: docker-compose run --rm app sh -c "python manage.py wait_for_db && python manage.py test"
+          # this will first connect to db successfully using 'wait_for_db',
+          # and then test the whole code (all python files only)
+          # above command will run on the code files and perform unit testing
       - name: Lint
         run: docker-compose run --rm app sh -c "flake8"
           # we will do linting(checking formatting/typo errs) in all the python files by executing above command

@@ -47,7 +47,7 @@ RUN python -m venv /py && \
         # here, we installed dependency 'postgresql-client' for adaptor 'psycopg2' inside our alpine image
         # 'psycopg2' is a postgresql adaptor use to connect with python
         # 'postgresql-client' dependency is required to install & run the adaptor 'psycopg2',
-        # so its a permanent dependency and,
+        # so its a permanent dependency, and
         # we neither going to remove it after installing 'psycopg2' and nor in production environment
     apk add --update --no-cache --virtual .tmp-build-deps \
         # this will set a virtual dependency pkg '.tmp-build-deps' and group below listed dependencies into it
@@ -55,7 +55,7 @@ RUN python -m venv /py && \
             # these dependencies are also required, only to install the adaptor 'psycopg2',
             # so, after creation of img/container we will delete these dependencies both in dev & prod env
     /py/bin/pip install -r /tmp/requirements.txt && \
-        # here we specify full path of virtual environment and,
+        # here we specify full path of virtual environment, and
         # install pkgs (listed in file '/tmp/requirements.txt' stored in docker container) inside virtual env
     if [ $DEV = "true" ]; \
         then /py/bin/pip install -r /tmp/requirements.dev.txt ; \
